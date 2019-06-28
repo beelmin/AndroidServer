@@ -33,6 +33,7 @@ app.get('/', function (req, res,next) {
 	
 });
 
+
 app.post('/', function(req, res, next) {
 	if(req.body.authentication){
 		
@@ -52,11 +53,47 @@ app.post('/', function(req, res, next) {
 			    
 			    if(result.length == 0){
 			    	response = {success: false}
+			    	res.send(response);
 			    }
 			    else{
-			    	response = {success: true}
+
+
+			    	const instance2 = new MongoClient(uri, { useNewUrlParser: true });
+						instance2.connect((err, client) => {
+						  if (err){
+						  	console.log('failed to connect')
+						  	console.log(err)
+						  } 
+					  		else {
+				    
+				    		const collection2 = client.db("android_baza").collection("korisnici");
+
+		  					var query = { "username": req.body.username };
+		  					var newvalues = { $set: {online: true} };
+			    	
+							collection2.updateOne(query,newvalues, function(err, result) {
+						
+								if (err) throw(err)
+						
+
+								if(result){
+									response = {success: true}
+								}else{
+									response = {success : false}
+								}
+					
+								res.send(response);
+
+					
+							});
+					     
+				    		instance2.close()
+				        
+				  		}
+				 		});
+
 			    }
-			    res.send(response);
+			    
 			    
 			  });
 		    		 
