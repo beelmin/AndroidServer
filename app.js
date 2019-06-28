@@ -24,9 +24,7 @@ app.get('/', function (req, res,next) {
 		    if (err) throw err;
 		    
 		    instance.close();
-		    res.json({
-	    		"users": result
-	 	    }); 
+		    res.send(result);
 		    
 		  });
 	    
