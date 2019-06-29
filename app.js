@@ -109,6 +109,61 @@ app.post('/', function(req, res, next) {
 });
 
 
+app.post('/chat', function(req, res, next) {
+	
+	if(req.body.saveMess){
+		
+		var newMessage = {
+			
+			sender: req.body.sender,
+			message : req.body.message,
+			time : req.body.time
+	  };
+		
+	const instance = new MongoClient(uri, { useNewUrlParser: true });
+	instance.connect((err, client) => {
+	  if (err){
+		console.log('failed to connect')
+		console.log(err)
+	  } 
+	  else {
+	    console.log('connected')
+	    const collection = client.db("android_baza").collection(req.body.collectionName)
+	    collection.insertOne(newMessage);
+	    instance.close()
+
+	  }
+	 });
+		
+	}else if(req.body.getMess){
+		
+		const instance = new MongoClient(uri, { useNewUrlParser: true });
+		instance.connect((err, client) => {
+		  if (err){
+			console.log('failed to connect')
+			console.log(err)
+		  } 
+		  else {
+		    console.log('connected')
+		    const collection = client.db("android_baza").collection(req.body.collectionName).find({}).toArray(function(err, result) {
+			    if (err) throw err;
+
+			    instance.close();
+			    res.json({
+				"success" : true,
+				"conversations": result
+			    });
+
+			  });
+
+		  }
+		 });
+			
+	}
+  	   
+});
+
+
 
 
 app.listen(port, function () {
