@@ -45,7 +45,7 @@ app.post('/', function(req, res, next) {
 		  } 
 		  else {
 		    
-		    var query = { "username": req.body.username};
+		    var query = { "username": req.body.username, "password": req.body.password};
 		    console.log(query)
 		    const collection = client.db("android_baza").collection("korisnici");
 		    collection.find(query).toArray(function(err, result) {
