@@ -135,6 +135,8 @@ app.post('/chat', function(req, res, next) {
 	  }
 	 });
 		
+	res.send({success: true});
+		
 	}else if(req.body.getMess){
 		
 		const instance = new MongoClient(uri, { useNewUrlParser: true });
