@@ -151,10 +151,7 @@ app.post('/chat', function(req, res, next) {
 			    if (err) throw err;
 
 			    instance.close();
-			    res.json({
-				"success" : true,
-				"conversations": result
-			    });
+			    res.send(result);
 
 			  });
 
