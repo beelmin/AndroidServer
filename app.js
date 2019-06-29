@@ -108,6 +108,29 @@ app.post('/', function(req, res, next) {
 
 });
 
+app.get('/chat', function (req, res,next) {
+
+		const instance = new MongoClient(uri, { useNewUrlParser: true });
+		instance.connect((err, client) => {
+		  if (err){
+			console.log('failed to connect')
+			console.log(err)
+		  } 
+		  else {
+		    console.log('connected')
+		    const collection = client.db("android_baza").collection(req.query.kolekcija).find({}).toArray(function(err, result) {
+			    if (err) throw err;
+
+			    instance.close();
+			    res.send(result);
+
+			  });
+
+		  }
+		 });
+	
+});
+
 
 app.post('/chat', function(req, res, next) {
 	
@@ -137,27 +160,6 @@ app.post('/chat', function(req, res, next) {
 		
 	res.send({success: true});
 		
-	}else if(req.body.getMess){
-		
-		const instance = new MongoClient(uri, { useNewUrlParser: true });
-		instance.connect((err, client) => {
-		  if (err){
-			console.log('failed to connect')
-			console.log(err)
-		  } 
-		  else {
-		    console.log('connected')
-		    const collection = client.db("android_baza").collection(req.body.collectionName).find({}).toArray(function(err, result) {
-			    if (err) throw err;
-
-			    instance.close();
-			    res.send(result);
-
-			  });
-
-		  }
-		 });
-			
 	}
   	   
 });
